@@ -10,7 +10,7 @@
 
 ### Namespace
 
-### 
+###
 
 ## Neteork OS/Network Deamon
 
@@ -28,8 +28,6 @@
 
 ### vpp
 
-### 
-
 ## Routing
 
 ### OSPF
@@ -42,7 +40,7 @@
 
 ### Segment Routing
 
-https://www.intellilink.co.jp/column/5g/2020/090700.aspx
+<https://www.intellilink.co.jp/column/5g/2020/090700.aspx>
 
 ### SRv6
 
@@ -64,8 +62,6 @@ https://www.intellilink.co.jp/column/5g/2020/090700.aspx
 
 ### OpenVPN
 
-### 
-
 ## Toplogy Examples
 
 ### CLOS Topology
@@ -74,7 +70,7 @@ https://www.intellilink.co.jp/column/5g/2020/090700.aspx
 
 ### Service Chaining
 
-### Blackhole 
+### Blackhole
 
 ## Network Orchestrator
 
