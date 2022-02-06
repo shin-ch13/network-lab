@@ -1,0 +1,87 @@
+version: '3.9'
+services:
+  router1:
+    build: Ubuntu18.04
+    tty: true
+    privileged: true
+    networks:
+      ipv4_nw1:
+        ipv4_address: 10.0.0.10
+      ipv4_nw2:
+        ipv4_address: 20.0.0.10
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  router2:
+    build: Ubuntu18.04
+    tty: true
+    privileged: true
+    networks:
+      ipv6_nw1:
+        ipv6_address: 2001:1111:1111::10
+      ipv6_nw2:
+        ipv6_address: 2001:2222:2222::10
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  node1:
+    build: Ubuntu18.04
+    tty: true
+    privileged: true
+    networks:
+      ipv4_nw1:
+        ipv4_address: 10.0.0.2
+      ipv6_nw1:
+        ipv6_address: 2001:1111:1111::2
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.default.disable_ipv6=0
+  node2:
+    build: Ubuntu18.04
+    tty: true
+    privileged: true
+    networks:
+      ipv4_nw2:
+        ipv4_address: 20.0.0.2
+      ipv6_nw2:
+        ipv6_address: 2001:2222:2222::2
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.default.disable_ipv6=0
+networks:
+  ipv4_nw1:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.0.0.0/24"
+  ipv4_nw2:
+    ipam:
+      driver: default
+      config:
+        - subnet: "20.0.0.0/24"
+  ipv6_nw1:
+    ipam:
+      driver: default
+      config:
+        - subnet: "2001:1111:1111::/64"
+  ipv6_nw2:
+    ipam:
+      driver: default
+      config:
+        - subnet: "2001:2222:2222::/64"
