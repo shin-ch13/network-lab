@@ -1,3 +1,1 @@
-# NETWORK LAB
-
-各種ネットワーク検証用のリポジトリ
+https://github.com/shin-ch13/network-lab/wiki
