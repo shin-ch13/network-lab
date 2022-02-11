@@ -1,5 +1,5 @@
 FROM ubuntu:18.04 
-LABEL mainter "Nobuhiro Kaneko <soccer.nobu@gmail.com>"
+LABEL mainter "shin-ch13"
 
 # set timezone
 ENV TZ=Asia/Tokyo
