@@ -18,7 +18,7 @@ RUN apt update && apt install -y \
     iproute2 mtr traceroute iputils-ping telnet iperf tcpdump \
     openvswitch-switch wget curl pppoe pppoeconf lldpd \
     iptables ethtool python-scapy netcat-openbsd \
-    openssl gperf
+    openssl gperf bridge-utils
 
 # enable bash completion in interactive shells
 RUN echo "" > ~/.bashrc \
