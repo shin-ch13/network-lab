@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
+import sys
+import os
 import argparse
 import subprocess
 import json
 import pprint
 
 class DockerCommand:
+  def check_compose_file(self):
+    path = 'docker-compose.yml'
+    is_file = os.path.isfile(path)
+    if not is_file:
+      print(f"{path} not found")
+      sys.exit(1)
+
   def get_container_name(self,args):
     if 'ALL' in args.container:
       #print('ALL')
@@ -60,6 +69,7 @@ def main():
 
   args = parser.parse_args()
   dockercmd = DockerCommand()
+  dockercmd.check_compose_file()
   dockercmd.get_container_name(args)
 
   args.func(args)
