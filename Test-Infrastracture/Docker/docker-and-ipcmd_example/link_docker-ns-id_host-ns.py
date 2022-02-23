@@ -11,7 +11,7 @@ class DockerCommand:
     path = 'docker-compose.yml'
     is_file = os.path.isfile(path)
     if not is_file:
-      print(f"{path} not found")
+      print(f"{path} not found in current directory")
       sys.exit(1)
 
   def get_container_name(self,args):
