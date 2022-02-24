@@ -1,6 +1,6 @@
 ## Topology
 
-![topology.jpeg](topology.jpeg)
+![topology.drawio.svg](topology.drawio.svg)
 
 ## Host Requirement
 
