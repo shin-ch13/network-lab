@@ -4,7 +4,6 @@ import os
 import argparse
 import subprocess
 import json
-import pprint
 
 class DockerCommand:
   def check_compose_file(self):
@@ -55,16 +54,21 @@ class DockerCommand:
       proc = subprocess.run(['docker','inspect',json_dict[0]['ID'],'--format','\'{{.State.Pid}}\''],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
       if proc.returncode == 0:
         container_pid = proc.stdout.decode('utf8').replace('\n','').replace('\'','')
+        if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
+          container_pid_path = '/proc/{}/ns/net'.format(container_pid)
+        else:
+          print('/proc/{}/ns/net file not found'.format(container_pid))
+          sys.exit(1)
       else:
         print('{}'.format(proc.stderr.decode('utf8')))
         sys.exit(1)
     else:
       print('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
-    return container_pid
+    return container_pid,container_pid_path
 
 def get_docker_infos(services):
-  docker_infos[]
+  container_infos = []
   '''
   {
     {
@@ -72,40 +76,98 @@ def get_docker_infos(services):
       'container_name': 'docker-node1-1'
       'container_pid': 1111
       'container_pid_path':
-
+    }
+    ...
   }
   '''
-
   dockercmd = DockerCommand()
   dockercmd.check_compose_file()
-  print(dockercmd.get_container_service(services))
   for container_service in dockercmd.get_container_service(services):
     container_name = dockercmd.get_container_name(container_service)
-    container_pid = dockercmd.get_container_pid(container_service)
-    if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
-      container_pid_path = '/proc/{}/ns/net'.format(conatiner_pid)
-    else:
-      print('/proc/{}/ns/net not found'.format(container_pid))
-      sys.exit(1)
-
+    container_pid, container_pid_path = dockercmd.get_container_pid(container_service)
+    container_infos.append({
+      'container_service':container_service,
+      'container_name':container_name,
+      'container_pid':container_pid,
+      'container_pid_path':container_pid_path
+    })
+  return container_infos
 
 def link_show(args):
-  get_docker_infos(args.container)
-  print(container_pids)
-  for container_pid in container_pids:
-    if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
-      if os.path.islink('/proc/{}/ns/net'.format(container_pid)):
-        print(os.readlink('/proc/{}/ns/net'.format(container_pid)))
+  container_infos = get_docker_infos(args.container)
+  if os.path.exists('/var/run/netns'):
+    for i in range(len(container_infos)):
+      if os.path.isfile('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+        if os.path.islink('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+          print('{}: /var/run/netns/{} -> {}'.format(
+            container_infos[i]['container_service'],
+            container_infos[i]['container_service'],
+            os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+          ))
+        else:
+          print('{}: /var/run/netns/{} symbolic link not found'.format(
+            container_infos[i]['container_service'],
+            container_infos[i]['container_service']
+          ))
       else:
-        print('/proc/{}/ns/net symbolic link not found'.format(container_pid))
-    else:
-      print('/proc/{}/ns/net not found'.format(container_pid))
+        print('{}: /var/run/netns/{} file not found'.format(
+          container_infos[i]['container_service'],
+          container_infos[i]['container_service']
+        ))
+  else:
+    print('/var/run/netns directory not found')
+    
 
 def link_on(args):
-  print(pids)
+  container_infos = get_docker_infos(args.container)
+  if not os.path.exists('/var/run/netns'):
+    os.mkdir('/var/run/netns')
+  for i in range(len(container_infos)):
+    if os.path.isfile('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+      if os.path.islink('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+        print('{}: /var/run/netns/{} -> {} symbolic link already exist'.format(
+          container_infos[i]['container_service'],
+          container_infos[i]['container_service'],
+          os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+        ))
+      else:
+        os.symlink(
+          container_infos[i]['container_pid_path'],
+          '/var/run/netns/{}'.format(container_infos[i]['container_service'])
+        )
+        print('{}: /var/run/netns/{} -> {} symbolic link create'.format(
+          container_infos[i]['container_service'],
+          container_infos[i]['container_service'],
+          os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+        ))
+    else:
+      os.symlink(
+          container_infos[i]['container_pid_path'],
+          '/var/run/netns/{}'.format(container_infos[i]['container_service'])
+      )
+      print('{}: /var/run/netns/{} -> {} symbolic link create'.format(
+        container_infos[i]['container_service'],
+        container_infos[i]['container_service'],
+        os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+      ))
 
 def link_off(args):
-  print(pids)
+  container_infos = get_docker_infos(args.container)
+  for i in range(len(container_infos)):
+    if os.path.isfile('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+      print('{}: /var/run/netns/{} -> {} symbolic link destroy'.format(
+        container_infos[i]['container_service'],
+        container_infos[i]['container_service'],
+        os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+      ))
+      os.unlink(
+        '/var/run/netns/{}'.format(container_infos[i]['container_service'])
+      )
+    else:
+      print('{}: /var/run/netns/{} file not found'.format(
+        container_infos[i]['container_service'],
+        container_infos[i]['container_service']
+      ))
 
 def main():
   if not (os.geteuid() == 0 and os.getuid() == 0) :
@@ -113,7 +175,6 @@ def main():
     sys.exit(1)
 
   parser = argparse.ArgumentParser(prog='link_docker-ns-id_host-ns',description='This program links dokcer-namespace-id to host-namespace')
-
   subparsers = parser.add_subparsers(dest='command')
   subparsers.required = True
 
