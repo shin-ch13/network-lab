@@ -110,7 +110,14 @@ docker-copose down and link off from host namespace to docker container namespac
 
 ## Knowledge
 
+* `/proc/${container_pid}/ns/net`がコンテナプロセスが属するnamespaceを操作するファイルディスクリプタのシンボリックリンクである。  
+そのため、これを`/var/run/netns/`以下からシンボリックリンクを張ると、ipコマンド管理下のnamespaceとして認識させることができる。
 
+* ipコマンドを使えることによるメリットは使った限り下記
+  * コンテナのインターフェース名を指定できる(eth0,interface0,等)
+  * ipコマンド等によるLinux Networkingの仕組みを使えるため、tunnelインタフェースやルーティングが扱いやすい
+  * 全体的に不透明な部分が少ない
+* 一方でデメリットは、コンフィグ量が多くなる点であり、ipコマンドのコントローラプログラムを作ることで改善しそう。
 
 ## Links
 
