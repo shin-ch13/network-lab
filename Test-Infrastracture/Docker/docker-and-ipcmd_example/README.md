@@ -95,7 +95,7 @@ assign ip addr and static route
 % sudo ip netns exec node2 ip -6 route add 2001:1111:1111::/64 via 2001:2222:2222::10 dev node2_router2 
 ```
 
-test ping packet
+test ping packets
 
 ```shell
 % sudo ip netns exec node1 ping 10.0.0.2
