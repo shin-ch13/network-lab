@@ -127,3 +127,6 @@ docker-copose down and link off from host namespace to docker container namespac
 <https://qiita.com/ukinau/items/92740bd0bafc1e7427c5>
 <https://man7.org/linux/man-pages/man8/ip-link.8.html>
 <https://christina04.hatenablog.com/entry/network-namespace>
+<https://christina04.hatenablog.com/entry/network-namespace>
+<https://christina04.hatenablog.com/entry/access-internet-from-network-namespace>
+<https://nmstate.io/>
