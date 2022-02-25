@@ -1,7 +1,10 @@
 version: '3.9'
 services:
   router1:
-    build: Ubuntu18.04
+    build:
+      context: ./Ubuntu18.04
+      dockerfile: Dockerfile
+      network: none
 #    pid: host
     tty: true
     privileged: true
@@ -17,7 +20,10 @@ services:
       - net.ipv6.conf.default.disable_ipv6=0
       - net.ipv6.conf.default.seg6_enabled=1
   router2:
-    build: Ubuntu18.04
+    build:
+      context: ./Ubuntu18.04
+      dockerfile: Dockerfile
+      network: none
 #    pid: host
     tty: true
     privileged: true
@@ -33,7 +39,10 @@ services:
       - net.ipv6.conf.default.disable_ipv6=0
       - net.ipv6.conf.default.seg6_enabled=1
   node1:
-    build: Ubuntu18.04
+    build:
+      context: ./Ubuntu18.04
+      dockerfile: Dockerfile
+      network: none
 #    pid: host
     tty: true
     privileged: true
@@ -41,7 +50,10 @@ services:
       - net.ipv6.conf.all.disable_ipv6=0
       - net.ipv6.conf.default.disable_ipv6=0
   node2:
-    build: Ubuntu18.04
+    build:
+      context: ./Ubuntu18.04
+      dockerfile: Dockerfile
+      network: none
 #    pid: host
     tty: true
     privileged: true
