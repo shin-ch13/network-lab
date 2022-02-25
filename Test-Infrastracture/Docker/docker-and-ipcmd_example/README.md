@@ -22,6 +22,8 @@ link status for host namespace
 
 ```shell
 % sudo python3 link_docker-ns.py link-show
+% sudo python3 link_docker-ns.py link-show -c [container_service ...]
+% sudo python3 link_docker-ns.py link-show-force -c [container_service ...]
 ```
 
 docker-copose down and link off from host namespace to docker container namespace id
@@ -29,6 +31,7 @@ docker-copose down and link off from host namespace to docker container namespac
 ```shell
 % sudo python3 link_docker-ns.py link-off && docker-compose down
 % sudo python3 link_docker-ns.py link-off -c [container_service ...] && docker-compose down
+% docker-compose down && sudo python3 link_docker-ns.py link-off-force -c [container_service ...]
 ```
 
 ## Run Example
@@ -119,6 +122,9 @@ docker-copose down and link off from host namespace to docker container namespac
   * 全体的に不透明な部分が少ない
 * 一方でデメリットは、コンフィグ量が多くなる点であり、ipコマンドのコントローラプログラムを作ることで改善しそう。
 
+* docker-compose.ymlに`network_mode: "none"`を記述すると、コンテナを他コンテナおよびホストのネットワークから完全に隔離してデプロイできる。
+* デフォルトは`network_mode: "bridge"`であり、各コンテナは１つのbridgeインターフェースに収容され、ホストネットワークとbridgeインターフェースも接続される。また、ホストの物理NICが持つIPアドレスへのNAPTルールも自動設定される。これにより、コンテナ間の疎通、コンテナのホスト外部NWとの疎通が可能になる。
+
 ## Links
 
 <https://www.slideshare.net/enakai/docker-34668707>
@@ -130,3 +136,4 @@ docker-copose down and link off from host namespace to docker container namespac
 <https://christina04.hatenablog.com/entry/network-namespace>
 <https://christina04.hatenablog.com/entry/access-internet-from-network-namespace>
 <https://nmstate.io/>
+<https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-file-v3/#network_mode>
