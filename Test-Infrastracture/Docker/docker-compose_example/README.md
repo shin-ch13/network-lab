@@ -83,7 +83,7 @@ $ docker-compose exec node1 ping6 2001:2222:2222::2
 ## Links
 
 * Docker composeのネットワーク設定
-  * <https://docs.docker.com/compose/networking/>  
-  * <https://docs.docker.com/compose/compose-file/compose-file-v3/#networks>  
-  * <http://docs.docker.jp/v19.03/engine/userguide/networking/work-with-networks.html>
+  * [Networking in Compose | Docker Documentation](https://docs.docker.com/compose/networking/)
+  * [Compose file version 3 reference #networks| Docker Documentation](https://docs.docker.com/compose/compose-file/compose-file-v3/#networks)
+  * [network コマンドを使う Docker-docs-ja 19.03 ドキュメント](http://docs.docker.jp/v19.03/engine/userguide/networking/work-with-networks.html)
   * <https://github.com/haugene/docker-transmission-openvpn/issues/1541#issuecomment-731770864>

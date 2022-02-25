@@ -127,13 +127,14 @@ docker-copose down and link off from host namespace to docker container namespac
 
 ## Links
 
-<https://www.slideshare.net/enakai/docker-34668707>
-<https://enakai00.hatenablog.com/entry/20140424/1398321672>
-<https://lwn.net/Articles/531114/>
-<https://qiita.com/ukinau/items/92740bd0bafc1e7427c5>
-<https://man7.org/linux/man-pages/man8/ip-link.8.html>
-<https://christina04.hatenablog.com/entry/network-namespace>
-<https://christina04.hatenablog.com/entry/network-namespace>
-<https://christina04.hatenablog.com/entry/access-internet-from-network-namespace>
-<https://nmstate.io/>
-<https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-file-v3/#network_mode>
+* [Dockerを支える技術 by Etsuji Nakai](https://www.slideshare.net/enakai/docker-34668707)
+* [Dockerのネットワーク管理とnetnsの関係 by Etsuji Nakai](https://enakai00.hatenablog.com/entry/20140424/1398321672)
+* <https://lwn.net/Articles/531114/>
+* [Docker containerのnetwork namespaceでdebugしたい | Qiita](https://qiita.com/ukinau/items/92740bd0bafc1e7427c5)
+* [ip-link(8) - Linux manual page](https://man7.org/linux/man-pages/man8/ip-link.8.html>¥)
+* [ip netnsコマンドで学ぶNetwork Namespace](https://christina04.hatenablog.com/entry/network-namespace)
+* [Network NamespaceにBridge経由でアクセスする](https://christina04.hatenablog.com/entry/network-namespace-with-bridge)
+* [Network Namespaceから外部ネットワークへアクセスする](https://christina04.hatenablog.com/entry/access-internet-from-network-namespace)
+* <https://nmstate.io/>
+* [Compose ファイル バージョン 3 リファレンス #network_mode| Docker ドキュメント](https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/compose-file-v3/#network_mode)
+* [Docker Network - Network drivers](https://yokohei.com/docs/docker-driver.html)
