@@ -47,11 +47,10 @@ class DockerCommand:
       sys.exit(1)
     return container_name
 
-  def get_container_id(self,container_service):
-    proc = subprocess.run(['docker-compose','ps',container_service,'--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+  def get_container_id(self,container_name):
+    proc = subprocess.run(['docker','inspect',container_name,'--format','{{.Id}}'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     if proc.returncode == 0:
-      json_dict = json.loads(proc.stdout.decode('utf8'))
-      container_id= json_dict[0]['ID']
+      container_id= proc.stdout.decode('utf8').strip()
     else:
       print('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
@@ -89,7 +88,7 @@ def get_docker_infos(services):
   dockercmd.check_compose_file()
   for container_service in dockercmd.get_container_service(services):
     container_name = dockercmd.get_container_name(container_service)
-    container_id = dockercmd.get_container_id(container_service)
+    container_id = dockercmd.get_container_id(container_name)
     container_pid, container_pid_path = dockercmd.get_container_pid(container_id)
     container_infos.append({
       'container_service':container_service,
