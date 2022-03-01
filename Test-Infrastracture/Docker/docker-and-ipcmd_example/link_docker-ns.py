@@ -51,9 +51,9 @@ class DockerCommand:
     proc = subprocess.run(['docker-compose','ps',container_service,'--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     if proc.returncode == 0:
       json_dict = json.loads(proc.stdout.decode('utf8'))
-      proc = subprocess.run(['docker','inspect',json_dict[0]['ID'],'--format','\'{{.State.Pid}}\''],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+      proc = subprocess.run(['docker','inspect',json_dict[0]['ID'],'--format','{{.State.Pid}}'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
       if proc.returncode == 0:
-        container_pid = proc.stdout.decode('utf8').replace('\n','').replace('\'','')
+        container_pid = proc.stdout.decode('utf8').strip()
         if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
           container_pid_path = '/proc/{}/ns/net'.format(container_pid)
         else:
