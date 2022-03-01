@@ -13,17 +13,15 @@ class DockerCommand:
       sys.exit(1)
 
   def get_container_service(self,services):
+    self.check_compose_file()
     container_services = []
     if 'ALL' in services:
-      proc = subprocess.run(['docker-compose','ps','--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-      json_dict = json.loads(proc.stdout.decode('utf8'))
-      if not json_dict:
-        print('docker container not up')
-        sys.exit(1)
+      proc = subprocess.run(['docker-compose','config','--services'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+      if proc.returncode == 0:
+        container_services = proc.stdout.decode('utf8').split()
       else:
-        for i in range(len(json_dict)):
-          container_service = json_dict[i]['Service']
-          container_services.append(container_service)
+        print('{}'.format(proc.stderr.decode('utf8')))
+        sys.exit(1)
     else:
       for service in services:
         proc = subprocess.run(['docker-compose','ps',service,'--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -37,6 +35,7 @@ class DockerCommand:
     return container_services
 
   def get_container_name(self,container_service):
+    self.check_compose_file()
     proc = subprocess.run(['docker-compose','ps',container_service,'--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     if proc.returncode == 0:
       json_dict = json.loads(proc.stdout.decode('utf8'))

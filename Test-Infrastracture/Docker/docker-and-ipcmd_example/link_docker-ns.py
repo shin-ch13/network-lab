@@ -19,7 +19,6 @@ def get_docker_infos(services):
   }
   '''
   dockercmd = DockerCommand()
-  dockercmd.check_compose_file()
   for container_service in dockercmd.get_container_service(services):
     container_name = dockercmd.get_container_name(container_service)
     container_id = dockercmd.get_container_id(container_name)
@@ -34,48 +33,26 @@ def get_docker_infos(services):
   return container_infos
 
 def link_show(args):
-  container_infos = get_docker_infos(args.container)
+  dockercmd = DockerCommand()
+  container_services = dockercmd.get_container_service(args.container)
   if os.path.exists('/var/run/netns'):
-    for i in range(len(container_infos)):
-      if os.path.lexists('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
-        if os.path.islink('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
+    for container_service in container_services:
+      if os.path.lexists('/var/run/netns/{}'.format(container_service)):
+        if os.path.islink('/var/run/netns/{}'.format(container_service)):
           print('{}: /var/run/netns/{} -> {}'.format(
-            container_infos[i]['container_service'],
-            container_infos[i]['container_service'],
-            os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+            container_service,
+            container_service,
+            os.readlink('/var/run/netns/{}'.format(container_service))
           ))
         else:
           print('{}: /var/run/netns/{} symbolic link not found'.format(
-            container_infos[i]['container_service'],
-            container_infos[i]['container_service']
+            container_service,
+            container_service
           ))
       else:
         print('{}: /var/run/netns/{} file not found'.format(
-          container_infos[i]['container_service'],
-          container_infos[i]['container_service']
-        ))
-  else:
-    print('/var/run/netns directory not found')
-
-def link_show_force(args):
-  if os.path.exists('/var/run/netns'):
-    for i in range(len(args.container)):
-      if os.path.lexists('/var/run/netns/{}'.format(args.container[i])):
-        if os.path.islink('/var/run/netns/{}'.format(args.container[i])):
-          print('{}: /var/run/netns/{} -> {}'.format(
-            args.container[i],
-            args.container[i],
-            os.readlink('/var/run/netns/{}'.format(args.container[i]))
-          ))
-        else:
-          print('{}: /var/run/netns/{} symbolic link not found'.format(
-            args.container[i],
-            args.container[i]
-          ))
-      else:
-        print('{}: /var/run/netns/{} file not found'.format(
-          args.container[i],
-          args.container[i]
+          container_service,
+          container_service
         ))
   else:
     print('/var/run/netns directory not found')
@@ -114,38 +91,22 @@ def link_on(args):
       ))
 
 def link_off(args):
-  container_infos = get_docker_infos(args.container)
-  for i in range(len(container_infos)):
-    if os.path.lexists('/var/run/netns/{}'.format(container_infos[i]['container_service'])):
-      print('{}: /var/run/netns/{} -> {} symbolic link destroy'.format(
-        container_infos[i]['container_service'],
-        container_infos[i]['container_service'],
-        os.readlink('/var/run/netns/{}'.format(container_infos[i]['container_service']))
+  dockercmd = DockerCommand()
+  container_services = dockercmd.get_container_service(args.container)
+  for container_service in container_services:
+    if os.path.lexists('/var/run/netns/{}'.format(container_service)):
+      print('{}: /var/run/netns/{} -> {} symbolic link unlink'.format(
+        container_service,
+        container_service,
+        os.readlink('/var/run/netns/{}'.format(container_service))
       ))
       os.unlink(
-        '/var/run/netns/{}'.format(container_infos[i]['container_service'])
+        '/var/run/netns/{}'.format(container_service)
       )
     else:
       print('{}: /var/run/netns/{} file not found'.format(
-        container_infos[i]['container_service'],
-        container_infos[i]['container_service']
-      ))
-
-def link_off_force(args):
-  for i in range(len(args.container)):
-    if os.path.lexists('/var/run/netns/{}'.format(args.container[i])):
-      print('{}: /var/run/netns/{} -> {} symbolic link destroy'.format(
-        args.container[i],
-        args.container[i],
-        os.readlink('/var/run/netns/{}'.format(args.container[i]))
-      ))
-      os.unlink(
-        '/var/run/netns/{}'.format(args.container[i])
-      )
-    else:
-      print('{}: /var/run/netns/{} file not found'.format(
-        args.container[i],
-        args.container[i]
+        container_service,
+        container_service
       ))
 
 def main():
@@ -161,10 +122,6 @@ def main():
   parser_link_show.set_defaults(func=link_show)
   parser_link_show.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
 
-  parser_link_show_force = subparsers.add_parser('link-show-force',help='Forcibly Link Show docker-namespace-id')
-  parser_link_show_force.set_defaults(func=link_show_force)
-  parser_link_show_force.add_argument('-c', '-C', '--container', nargs='*', required=True, help='container-name on docker-compose.yml')
-
   parser_link_on = subparsers.add_parser('link-on',help='Link On docker-namespace-id to host-namespace')
   parser_link_on.set_defaults(func=link_on)
   parser_link_on.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
@@ -172,10 +129,6 @@ def main():
   parser_link_off = subparsers.add_parser('link-off',help='Link Off docker-namespace-id to host-namespace')
   parser_link_off.set_defaults(func=link_off)
   parser_link_off.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
-
-  parser_link_off_force = subparsers.add_parser('link-off-force',help='Forcibly Link Off docker-namespace-id to host-namespace')
-  parser_link_off_force.set_defaults(func=link_off_force)
-  parser_link_off_force.add_argument('-c', '-C', '--container', nargs='*', required=True, help='container-name on docker-compose.yml')
 
   #parser.print_help()
 
