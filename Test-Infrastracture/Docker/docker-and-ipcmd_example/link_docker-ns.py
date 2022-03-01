@@ -78,9 +78,9 @@ def get_docker_infos(services):
     {
       'container_service': 'node1'
       'container_name': 'docker-node1-1'
-      'container_id': 111111111111111
-      'container_pid': 1111
-      'container_pid_path':
+      'container_id': '111111aaaaaaaaa'
+      'container_pid': '1111'
+      'container_pid_path': '/proc/1111/ns/net'
     }
     ...
   }
