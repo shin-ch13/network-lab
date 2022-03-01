@@ -47,20 +47,24 @@ class DockerCommand:
       sys.exit(1)
     return container_name
 
-  def get_container_pid(self,container_service):
+  def get_container_id(self,container_service):
     proc = subprocess.run(['docker-compose','ps',container_service,'--format=json'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     if proc.returncode == 0:
       json_dict = json.loads(proc.stdout.decode('utf8'))
-      proc = subprocess.run(['docker','inspect',json_dict[0]['ID'],'--format','{{.State.Pid}}'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-      if proc.returncode == 0:
-        container_pid = proc.stdout.decode('utf8').strip()
-        if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
-          container_pid_path = '/proc/{}/ns/net'.format(container_pid)
-        else:
-          print('/proc/{}/ns/net file not found'.format(container_pid))
-          sys.exit(1)
+      container_id= json_dict[0]['ID']
+    else:
+      print('{}'.format(proc.stderr.decode('utf8')))
+      sys.exit(1)
+    return container_id
+
+  def get_container_pid(self,container_id):
+    proc = subprocess.run(['docker','inspect',container_id,'--format','{{.State.Pid}}'],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    if proc.returncode == 0:
+      container_pid = proc.stdout.decode('utf8').strip()
+      if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
+        container_pid_path = '/proc/{}/ns/net'.format(container_pid)
       else:
-        print('{}'.format(proc.stderr.decode('utf8')))
+        print('/proc/{}/ns/net file not found'.format(container_pid))
         sys.exit(1)
     else:
       print('{}'.format(proc.stderr.decode('utf8')))
@@ -74,6 +78,7 @@ def get_docker_infos(services):
     {
       'container_service': 'node1'
       'container_name': 'docker-node1-1'
+      'container_id': 111111111111111
       'container_pid': 1111
       'container_pid_path':
     }
@@ -84,13 +89,16 @@ def get_docker_infos(services):
   dockercmd.check_compose_file()
   for container_service in dockercmd.get_container_service(services):
     container_name = dockercmd.get_container_name(container_service)
-    container_pid, container_pid_path = dockercmd.get_container_pid(container_service)
+    container_id = dockercmd.get_container_id(container_service)
+    container_pid, container_pid_path = dockercmd.get_container_pid(container_id)
     container_infos.append({
       'container_service':container_service,
       'container_name':container_name,
+      'container_id':container_id,
       'container_pid':container_pid,
       'container_pid_path':container_pid_path
     })
+  print(container_infos)
   return container_infos
 
 def link_show(args):
