@@ -23,15 +23,13 @@ link status for host namespace
 ```shell
 % sudo python3 link_docker-ns.py link-show
 % sudo python3 link_docker-ns.py link-show -c [container_service ...]
-% sudo python3 link_docker-ns.py link-show-force -c [container_service ...]
 ```
 
 docker-copose down and link off from host namespace to docker container namespace id
 
 ```shell
-% sudo python3 link_docker-ns.py link-off && docker-compose down
-% sudo python3 link_docker-ns.py link-off -c [container_service ...] && docker-compose down
-% docker-compose down && sudo python3 link_docker-ns.py link-off-force -c [container_service ...]
+% docker-compose down && sudo python3 link_docker-ns.py link-off
+% docker-compose down && sudo python3 link_docker-ns.py link-off -c [container_service ...]
 ```
 
 ## Run Example
@@ -108,7 +106,7 @@ test ping packets
 docker-copose down and link off from host namespace to docker container namespace id
 
 ```shell
-% sudo python3 link_docker-ns.py link-off -c node1 node2 router1 router2 && docker-compose down
+% docker-compose down && sudo python3 link_docker-ns.py link-off -c node1 node2 router1 router2
 ```
 
 ## Knowledge
