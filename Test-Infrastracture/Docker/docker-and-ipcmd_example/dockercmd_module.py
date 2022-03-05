@@ -5,6 +5,21 @@ import subprocess
 import json
 
 class DockerCommand:
+  def __init__(self):
+    self.container_infos = []
+    '''
+    {
+      {
+        'container_service': 'node1'
+        'container_name': 'docker-node1-1'
+        'container_id': '111111aaaaaaaaa'
+        'container_pid': '1111'
+        'container_pid_path': '/proc/1111/ns/net'
+      }
+      ...
+    }
+    '''
+
   def check_compose_file(self):
     path = 'docker-compose.yml'
     is_file = os.path.isfile(path)
@@ -67,3 +82,17 @@ class DockerCommand:
       print('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
     return container_pid,container_pid_path
+
+  def get_container_infos(self,service):
+    for container_service in self.get_container_service(service):
+      container_name = self.get_container_name(container_service)
+      container_id = self.get_container_id(container_name)
+      container_pid, container_pid_path = self.get_container_pid(container_id)
+      self.container_infos.append({
+        'container_service':container_service,
+        'container_name':container_name,
+        'container_id':container_id,
+        'container_pid':container_pid,
+        'container_pid_path':container_pid_path
+      })
+    return self.container_infos
