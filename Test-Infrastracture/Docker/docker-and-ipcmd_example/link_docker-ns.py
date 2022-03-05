@@ -118,17 +118,18 @@ def main():
   subparsers = parser.add_subparsers(dest='command')
   subparsers.required = True
 
-  parser_link_show = subparsers.add_parser('link-show',help='Link Show docker-namespace-id')
+  subparsers_option = argparse.ArgumentParser(add_help=False)
+  subparsers_option.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
+
+  parser_link_show = subparsers.add_parser('link-show',help='Link Show docker-namespace-id', parents = [subparsers_option])
   parser_link_show.set_defaults(func=link_show)
-  parser_link_show.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
 
-  parser_link_on = subparsers.add_parser('link-on',help='Link On docker-namespace-id to host-namespace')
+  parser_link_on = subparsers.add_parser('link-on',help='Link On docker-namespace-id to host-namespace', parents = [subparsers_option])
   parser_link_on.set_defaults(func=link_on)
-  parser_link_on.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
 
-  parser_link_off = subparsers.add_parser('link-off',help='Link Off docker-namespace-id to host-namespace')
+  parser_link_off = subparsers.add_parser('link-off',help='Link Off docker-namespace-id to host-namespace', parents = [subparsers_option])
   parser_link_off.set_defaults(func=link_off)
-  parser_link_off.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
+
 
   #parser.print_help()
 
