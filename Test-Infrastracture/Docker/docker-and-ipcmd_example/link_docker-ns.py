@@ -84,7 +84,7 @@ def link_off(args):
 
 def main():
   if not (os.geteuid() == 0 and os.getuid() == 0) :
-    print('This program must be run as root')
+    sys.stderr.write('This program must be run as root')
     sys.exit(1)
 
   parser = argparse.ArgumentParser(prog='link_docker-ns-id_host-ns',description='This program links dokcer-namespace-id to host-namespace')

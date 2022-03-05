@@ -24,7 +24,7 @@ class DockerCommand:
     path = 'docker-compose.yml'
     is_file = os.path.isfile(path)
     if not is_file:
-      print(f"{path} not found in current directory")
+      sys.stderr.write(f"{path} not found in current directory")
       sys.exit(1)
 
   def get_container_service(self,services):
@@ -35,7 +35,7 @@ class DockerCommand:
       if proc.returncode == 0:
         container_services = proc.stdout.decode('utf8').split()
       else:
-        print('{}'.format(proc.stderr.decode('utf8')))
+        sys.stderr.write('{}'.format(proc.stderr.decode('utf8')))
         sys.exit(1)
     else:
       for service in services:
@@ -45,7 +45,7 @@ class DockerCommand:
           container_service = json_dict[0]['Service']
           container_services.append(container_service)
         else:
-          print('{}'.format(proc.stderr.decode('utf8')))
+          sys.stderr.write('{}'.format(proc.stderr.decode('utf8')))
           sys.exit(1)
     return container_services
 
@@ -56,7 +56,7 @@ class DockerCommand:
       json_dict = json.loads(proc.stdout.decode('utf8'))
       container_name = json_dict[0]['Name']
     else:
-      print('{}'.format(proc.stderr.decode('utf8')))
+      sys.stderr.write('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
     return container_name
 
@@ -65,7 +65,7 @@ class DockerCommand:
     if proc.returncode == 0:
       container_id= proc.stdout.decode('utf8').strip()
     else:
-      print('{}'.format(proc.stderr.decode('utf8')))
+      sys.stderr.write('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
     return container_id
 
@@ -76,10 +76,10 @@ class DockerCommand:
       if os.path.isfile('/proc/{}/ns/net'.format(container_pid)):
         container_pid_path = '/proc/{}/ns/net'.format(container_pid)
       else:
-        print('/proc/{}/ns/net file not found'.format(container_pid))
+        sys.stderr.write('/proc/{}/ns/net file not found'.format(container_pid))
         sys.exit(1)
     else:
-      print('{}'.format(proc.stderr.decode('utf8')))
+      sys.stderr.write('{}'.format(proc.stderr.decode('utf8')))
       sys.exit(1)
     return container_pid,container_pid_path
 
