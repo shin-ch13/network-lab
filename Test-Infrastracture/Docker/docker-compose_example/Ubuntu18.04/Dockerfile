@@ -10,7 +10,7 @@ RUN apt update && apt install -y \
     kmod git autoconf automake libtool make gawk libreadline-dev \
 	texinfo dejagnu pkg-config libpam0g-dev libjson-c-dev bison flex \
 	libc-ares-dev libsystemd-dev libgmp-dev \
-    python3-dev python-pytest python3-jinja2 \
+    python3-dev python3-pip python-pytest python3-jinja2 \
     vim git tmux silversearcher-ag bash-completion
 
 # install network packages
