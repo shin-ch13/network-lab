@@ -4,37 +4,9 @@ import os
 import argparse
 from dockercmd_module import DockerCommand
 
-def get_docker_infos(services):
-  container_infos = []
-  '''
-  {
-    {
-      'container_service': 'node1'
-      'container_name': 'docker-node1-1'
-      'container_id': '111111aaaaaaaaa'
-      'container_pid': '1111'
-      'container_pid_path': '/proc/1111/ns/net'
-    }
-    ...
-  }
-  '''
-  dockercmd = DockerCommand()
-  for container_service in dockercmd.get_container_service(services):
-    container_name = dockercmd.get_container_name(container_service)
-    container_id = dockercmd.get_container_id(container_name)
-    container_pid, container_pid_path = dockercmd.get_container_pid(container_id)
-    container_infos.append({
-      'container_service':container_service,
-      'container_name':container_name,
-      'container_id':container_id,
-      'container_pid':container_pid,
-      'container_pid_path':container_pid_path
-    })
-  return container_infos
-
 def link_show(args):
   dockercmd = DockerCommand()
-  container_services = dockercmd.get_container_service(args.container)
+  container_services = dockercmd.get_container_service(args.service)
   if os.path.exists('/var/run/netns'):
     for container_service in container_services:
       if os.path.lexists('/var/run/netns/{}'.format(container_service)):
@@ -58,7 +30,8 @@ def link_show(args):
     print('/var/run/netns directory not found')
     
 def link_on(args):
-  container_infos = get_docker_infos(args.container)
+  dockercmd = DockerCommand()
+  container_infos = dockercmd.get_container_infos(args.service)
   if not os.path.exists('/var/run/netns'):
     os.mkdir('/var/run/netns')
   for i in range(len(container_infos)):
@@ -92,7 +65,7 @@ def link_on(args):
 
 def link_off(args):
   dockercmd = DockerCommand()
-  container_services = dockercmd.get_container_service(args.container)
+  container_services = dockercmd.get_container_service(args.service)
   for container_service in container_services:
     if os.path.lexists('/var/run/netns/{}'.format(container_service)):
       print('{}: /var/run/netns/{} -> {} symbolic link unlink'.format(
@@ -119,7 +92,7 @@ def main():
   subparsers.required = True
 
   subparsers_option = argparse.ArgumentParser(add_help=False)
-  subparsers_option.add_argument('-c', '-C', '--container', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
+  subparsers_option.add_argument('-s', '-S', '--service', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
 
   parser_link_show = subparsers.add_parser('link-show',help='Link Show docker-namespace-id', parents = [subparsers_option])
   parser_link_show.set_defaults(func=link_show)
