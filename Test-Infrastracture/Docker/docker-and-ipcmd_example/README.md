@@ -9,27 +9,37 @@
 Ubuntu 18.04.6 LTS
 ```
 
+## Setup
+
+```shell
+# install
+% sudo python3 setup.py install
+# uninstall
+% sudo rm /usr/local/lib/python3.6/dist-packages/link_dokcer_ns-0.0.1-*
+% sudo rm /usr/local/bin/link-dokcer-ns
+```
+
 ## Usage
 
 docker-copose up and link on from host namespace to docker container namespace id
 
 ```shell
-% docker-compose up -d && sudo python3 link_docker-ns.py link-on
-% docker-compose up -d && sudo python3 link_docker-ns.py link-on -c [container_service ...]
+% docker-compose up -d && sudo link_docker-ns.py link-on
+% docker-compose up -d && sudo link_docker-ns.py link-on -c [container_service ...]
 ```
 
 link status for host namespace
 
 ```shell
-% sudo python3 link_docker-ns.py link-show
-% sudo python3 link_docker-ns.py link-show -c [container_service ...]
+% sudo link_docker-ns.py link-show
+% sudo link_docker-ns.py link-show -c [container_service ...]
 ```
 
 docker-copose down and link off from host namespace to docker container namespace id
 
 ```shell
-% docker-compose down && sudo python3 link_docker-ns.py link-off
-% docker-compose down && sudo python3 link_docker-ns.py link-off -c [container_service ...]
+% docker-compose down && sudo link_docker-ns.py link-off
+% docker-compose down && sudo link_docker-ns.py link-off -c [container_service ...]
 ```
 
 ## Run Example
@@ -38,7 +48,7 @@ docker-copose up and link on from host namespace to docker container namespace i
 
 ```shell
 % docker-compose up -d
-% sudo python3 link_docker-ns.py link-on -c node1 node2 router1 router2
+% sudo link_docker-ns.py link-on -c node1 node2 router1 router2
 node1: /var/run/netns/node1 -> /proc/10109/ns/net symbolic link create
 node2: /var/run/netns/node2 -> /proc/10215/ns/net symbolic link create
 router1: /var/run/netns/router1 -> /proc/10036/ns/net symbolic link create
@@ -48,7 +58,7 @@ router2: /var/run/netns/router2 -> /proc/10196/ns/net symbolic link create
 link status for host namespace
 
 ```shell
-% sudo python3 link_docker-ns.py link-show  -c node1 node2 router1 router2
+% sudo link_docker-ns.py link-show  -c node1 node2 router1 router2
 node1: /var/run/netns/node1 -> /proc/10109/ns/net
 node2: /var/run/netns/node2 -> /proc/10215/ns/net
 router1: /var/run/netns/router1 -> /proc/10036/ns/net
@@ -106,7 +116,7 @@ test ping packets
 docker-copose down and link off from host namespace to docker container namespace id
 
 ```shell
-% docker-compose down && sudo python3 link_docker-ns.py link-off -c node1 node2 router1 router2
+% docker-compose down && sudo link_docker-ns.py link-off -c node1 node2 router1 router2
 ```
 
 ## Knowledge
