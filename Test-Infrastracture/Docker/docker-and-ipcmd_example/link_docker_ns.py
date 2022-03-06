@@ -108,5 +108,3 @@ def main():
 
   args = parser.parse_args()
   args.func(args)
-
-main()
