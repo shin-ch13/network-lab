@@ -24,7 +24,7 @@ class DockerCommand:
     path = 'docker-compose.yml'
     is_file = os.path.isfile(path)
     if not is_file:
-      sys.stderr.write(f"{path} not found in current directory")
+      sys.stderr.write('{} not found in current directory'.format(path))
       sys.exit(1)
 
   def get_container_service(self,services):
