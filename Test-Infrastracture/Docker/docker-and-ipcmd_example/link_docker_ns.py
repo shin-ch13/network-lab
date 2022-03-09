@@ -92,7 +92,7 @@ def main():
   subparsers.required = True
 
   subparsers_option = argparse.ArgumentParser(add_help=False)
-  subparsers_option.add_argument('-s', '-S', '--service', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
+  subparsers_option.add_argument('service', nargs='*', default='ALL', help='container-name on docker-compose.yml (default:ALL)')
 
   parser_link_show = subparsers.add_parser('link-show',help='Link Show docker-namespace-id', parents = [subparsers_option])
   parser_link_show.set_defaults(func=link_show)
