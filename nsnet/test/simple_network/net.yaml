@@ -1,0 +1,39 @@
+networks:
+  network1:
+    desc: 10.0.0.0/24
+    conn: direct
+    members:
+      - { name: node1, iface: eth0, ip: [10.0.0.1/24] }
+      - { name: router1, iface: eth0, ip: [10.0.0.10/24] }
+  network2:
+    desc: 20.0.0.0/24
+    conn: bridge
+    members:
+      - { name: router1, iface: eth1, ip: [20.0.0.10/24] }
+      - { name: node2, iface: eth0, ip: [20.0.0.2/24] }
+      - { name: node3, iface: eth0, ip: [20.0.0.3/24] }
+  network3:
+    desc: 2001:1111:1111::/64
+    conn: direct
+    members:
+      - { name: node1, iface: eth1, ip: ['2001:1111:1111::1/64'] }
+      - { name: router2, iface: eth0, ip: ['2001:1111:1111::10/64'] }
+  network4:
+    desc: 2001:2222:2222::/64
+    conn: bridge
+    members:
+      - { name: router2, iface: eth1, ip: ['2001:2222:2222::10/64'] }
+      - { name: node2, iface: eth1, ip: ['2001:2222:2222::2/64'] }
+      - { name: node4, iface: eth0, ip: ['2001:2222:2222::4/64'] }
+      
+commands:
+  node1:
+    - cmd: 'ip route add 20.0.0.0/24 via 10.0.0.10 dev eth0'
+    - cmd: 'ip -6 route add 2001:2222:2222::/64 via 2001:1111:1111::10 dev eth1'
+  node2:
+    - cmd: 'ip route add 10.0.0.0/24 via 20.0.0.10 dev eth0'
+    - cmd: 'ip -6 route add 2001:1111:1111::/64 via 2001:2222:2222::10 dev eth1'
+  node3:
+    - cmd: 'ip route add 10.0.0.0/24 via 20.0.0.10 dev eth0'
+  node4:
+    - cmd: 'ip -6 route add 2001:1111:1111::/64 via 2001:2222:2222::10 dev eth0'
