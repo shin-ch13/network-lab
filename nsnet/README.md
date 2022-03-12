@@ -49,7 +49,8 @@ $ cd nsnet/test/simple_network
 ### create docker container enviroment with flexible network
 $ sudo nsnet create -cf docker-compose.yml -nf net.yaml
 ### test or develop container enviroment
-$ sudo nsnet shell node1 # node1 is service name in docker-compose.yml
+### "node1" is service name in docker-compose.yml
+$ sudo nsnet shell node1
 ### after edit docker-compose.yml or net.yaml
 $ sudo nsnet recreate
 ### destroy docker container enviroment
