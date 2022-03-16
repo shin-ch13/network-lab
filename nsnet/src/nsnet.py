@@ -198,7 +198,7 @@ class Nsnet:
     
     for node,cmds in self.data['commands'].items():
       for cmd in cmds:
-        self.create_node_cmd.setdefault(node, []).append('ip netns exec {} {}'.format(
+        self.create_node_cmd.setdefault(node, []).append('docker-compose exec {} sh -c "{}"'.format(
           node,
           cmd['cmd']
         ))
