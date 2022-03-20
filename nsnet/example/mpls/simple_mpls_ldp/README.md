@@ -7,5 +7,5 @@
 ## Host Requirement
 
 ```shell
-$ sudo apt install linux-modules-extra-`uname -r` 
+sudo apt install linux-modules-extra-`uname -r` 
 ```
