@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ $(uname -a | grep -ci Ubuntu) -ge 1 ]; then
+    #for topotests under ubuntu host
+    sudo modprobe mpls_router mpls_iptunnel mpls_gso
+    sudo /etc/init.d/openvswitch-switch start
+    sudo /etc/init.d/frr start
+fi
+while true ; do sleep 365d ; done
