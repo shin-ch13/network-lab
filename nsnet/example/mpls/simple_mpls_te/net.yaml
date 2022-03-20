@@ -1,0 +1,127 @@
+networks:
+  network1:
+    desc: 172.16.1.0/24
+    conn: direct
+    members:
+      - { name: router1, iface: net1, ip: [172.16.1.1/24] }
+      - { name: router2, iface: net1, ip: [172.16.1.2/24] }
+  network2:
+    desc: 172.16.2.0/24
+    conn: direct
+    members:
+      - { name: router1, iface: net2, ip: [172.16.2.1/24] }
+      - { name: router3, iface: net2, ip: [172.16.2.3/24] }
+  network3:
+    desc: 172.16.3.0/24
+    conn: direct
+    members:
+      - { name: router2, iface: net3, ip: [172.16.3.2/24] }
+      - { name: router3, iface: net3, ip: [172.16.3.3/24] }
+  network4:
+    desc: 172.16.4.0/24
+    conn: direct
+    members:
+      - { name: router2, iface: net4, ip: [172.16.4.2/24] }
+      - { name: router4, iface: net4, ip: [172.16.4.4/24] }
+  network5:
+    desc: 172.16.5.0/24
+    conn: direct
+    members:
+      - { name: router3, iface: net5, ip: [172.16.5.3/24] }
+      - { name: router4, iface: net5, ip: [172.16.5.4/24] }
+  network6:
+    desc: 10.1.1.0/24
+    conn: direct
+    members:
+      - { name: node1, iface: net6, ip: [10.1.1.10/24] }
+      - { name: router1, iface: net6, ip: [10.1.1.1/24] }
+  network7:
+    desc: 10.1.2.0/24
+    conn: direct
+    members:
+      - { name: node2, iface: net7, ip: [10.1.2.40/24] }
+      - { name: router4, iface: net7, ip: [10.1.2.4/24] }  
+      
+commands:
+  router1:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net1.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net2.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+#    - cmd: >-
+#        vtysh -c 'conf t'
+#        -c 'interface lo'
+#        -c ' ip addr 1.1.1.1/32'
+#        -c 'exit'
+#        -c 'router ospf'
+#        -c ' network 1.1.1.1/32 area 0.0.0.0'
+#        -c ' network 10.1.1.0/24 area 0.0.0.0'
+#        -c ' network 172.16.1.0/24 area 0.0.0.0'
+#        -c ' network 172.16.2.0/24 area 0.0.0.0'
+#        -c 'exit'
+#        -c 'interface net6'
+#        -c ' ip ospf passive'
+#        -c 'exit'
+    - cmd: ip route add 10.1.2.0/24 encap mpls 100 via 172.16.1.2
+  router2:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net1.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net3.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net4.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+#    - cmd: >-
+#        vtysh -c 'conf t'
+#        -c 'interface lo'
+#        -c ' ip addr 2.2.2.2/32'
+#        -c 'exit'
+#        -c 'router ospf'
+#        -c ' network 2.2.2.2/32 area 0.0.0.0'
+#        -c ' network 172.16.1.0/24 area 0.0.0.0'
+#        -c ' network 172.16.3.0/24 area 0.0.0.0'
+#        -c ' network 172.16.4.0/24 area 0.0.0.0'
+#        -c 'exit'
+    - cmd: ip -M route add 100 via inet 172.16.3.3 as 101
+    - cmd: ip -M route add 200 via inet 172.16.3.3 as 201
+  router3:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net2.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net3.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net5.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+#    - cmd: >-
+#        vtysh -c 'conf t'
+#        -c 'interface lo'
+#        -c ' ip addr 3.3.3.3/32'
+#        -c 'exit'
+#        -c 'router ospf'
+#        -c ' network 3.3.3.3/32 area 0.0.0.0'
+#        -c ' network 172.16.2.0/24 area 0.0.0.0'
+#        -c ' network 172.16.3.0/24 area 0.0.0.0'
+#        -c ' network 172.16.5.0/24 area 0.0.0.0'
+#        -c 'exit'
+    - cmd: ip -M route add 101 via inet 172.16.5.4
+    - cmd: ip -M route add 201 via inet 172.16.2.1
+  router4:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net4.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net5.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+#    - cmd: >-
+#        vtysh -c 'conf t'
+#        -c 'interface lo'
+#        -c ' ip addr 4.4.4.4/32'
+#        -c 'exit'
+#        -c 'router ospf'
+#        -c ' network 4.4.4.4/32 area 0.0.0.0'
+#        -c ' network 10.1.2.0/24 area 0.0.0.0'
+#        -c ' network 172.16.4.0/24 area 0.0.0.0'
+#        -c ' network 172.16.5.0/24 area 0.0.0.0'
+#        -c 'exit'
+#        -c 'interface net7'
+#        -c ' ip ospf passive'
+#        -c 'exit'
+    - cmd: ip route add 10.1.1.0/24 encap mpls 200 via 172.16.4.2
+  node1:
+    - cmd: ip route add default via 10.1.1.1 
+  node2:
+    - cmd: ip route add default via 10.1.2.4 
