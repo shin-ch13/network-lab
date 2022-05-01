@@ -56,17 +56,18 @@ class Nsnet:
         else:
           logger.error('{}: "members: {}" duplicate in members'.format(network,member['name']))
           sys.exit(1)
-        for ip in member['ip']:
-          try:
-            ipaddress.ip_interface(ip)
-          except Exception as e:
-            logger.error(e, file=sys.stderr)
-            sys.exit(1)
-          if ipaddress.ip_interface(ip) not in addresses:
-            addresses.append(ipaddress.ip_interface(ip))
-          else:
-            logger.error('{}: "ip: {}" duplicate in members'.format(network,ipaddress.ip_interface(ip)))
-            sys.exit(1)
+        if 'ip' in member:
+          for ip in member['ip']:
+            try:
+              ipaddress.ip_interface(ip)
+            except Exception as e:
+              logger.error(e, file=sys.stderr)
+              sys.exit(1)
+            if ipaddress.ip_interface(ip) not in addresses:
+              addresses.append(ipaddress.ip_interface(ip))
+            else:
+              logger.error('{}: "ip: {}" duplicate in members'.format(network,ipaddress.ip_interface(ip)))
+              sys.exit(1)
 
     #if not (set(nodes_info.keys()) <=  set(namespaces_info.keys()) and len(namespaces_info.keys()) !=  0):
     #  logger.error('"{}" is not found in namespaces'.format(list(set(nodes_info.keys())-set(namespaces_info))))
@@ -176,25 +177,26 @@ class Nsnet:
             member['name'],
             member['iface']
           ))
-        for ip in  member['ip']:
-          if ipaddress.ip_interface(ip).version == 4:
-            self.create_cmd.setdefault(network, []).append('ip netns exec {} ip addr add {} dev {}'.format(
-              member['name'],
-              ipaddress.ip_interface(ip),
-              member['iface']
-            ))
-          elif ipaddress.ip_interface(ip).version == 6:
-            self.create_cmd.setdefault(network, []).append('ip netns exec {} ip -6 addr add {} dev {}'.format(
-              member['name'],
-              ipaddress.ip_interface(ip),
-              member['iface']
-            ))
-          #print(
-          #  network, network_detail['conn'],
-          #  member['name'],
-          #  member['iface']
-          #  ipaddress.ip_interface(ip),'v' + str(ipaddress.ip_interface(ip).version)
-          #)
+        if 'ip' in member:
+          for ip in  member['ip']:
+            if ipaddress.ip_interface(ip).version == 4:
+              self.create_cmd.setdefault(network, []).append('ip netns exec {} ip addr add {} dev {}'.format(
+                member['name'],
+                ipaddress.ip_interface(ip),
+                member['iface']
+              ))
+            elif ipaddress.ip_interface(ip).version == 6:
+              self.create_cmd.setdefault(network, []).append('ip netns exec {} ip -6 addr add {} dev {}'.format(
+                member['name'],
+                ipaddress.ip_interface(ip),
+                member['iface']
+              ))
+            #print(
+            #  network, network_detail['conn'],
+            #  member['name'],
+            #  member['iface']
+            #  ipaddress.ip_interface(ip),'v' + str(ipaddress.ip_interface(ip).version)
+            #)
     
     for node,cmds in self.data['commands'].items():
       for cmd in cmds:

@@ -30,7 +30,6 @@ mapping:
                     sequence:
                       - type: str
                         unique: True
-                        required: True
  "commands":
     type: map
     mapping:
