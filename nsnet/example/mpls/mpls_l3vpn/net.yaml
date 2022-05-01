@@ -1,0 +1,426 @@
+networks:
+  network1:
+    desc: 172.16.1.0/24
+    conn: direct
+    members:
+      - { name: p1, iface: net1, ip: [172.16.1.1/24] }
+      - { name: p2, iface: net1, ip: [172.16.1.2/24] }
+  network2:
+    desc: 172.16.2.0/24
+    conn: direct
+    members:
+      - { name: p1, iface: net2, ip: [172.16.2.1/24] }
+      - { name: p3, iface: net2, ip: [172.16.2.3/24] }
+  network3:
+    desc: 172.16.3.0/24
+    conn: direct
+    members:
+      - { name: p2, iface: net3, ip: [172.16.3.2/24] }
+      - { name: p3, iface: net3, ip: [172.16.3.3/24] }
+  network4:
+    desc: 172.16.4.0/24
+    conn: direct
+    members:
+      - { name: p2, iface: net4, ip: [172.16.4.2/24] }
+      - { name: p4, iface: net4, ip: [172.16.4.4/24] }
+  network5:
+    desc: 172.16.5.0/24
+    conn: direct
+    members:
+      - { name: p3, iface: net5, ip: [172.16.5.3/24] }
+      - { name: p4, iface: net5, ip: [172.16.5.4/24] }
+  network11:
+    desc: 172.16.11.0/24
+    conn: direct
+    members:
+      - { name: p1, iface: net11, ip: [172.16.11.1/24] }
+      - { name: pe1, iface: net11, ip: [172.16.11.11/24] }
+  network12:
+    desc: 172.16.12.0/24
+    conn: direct
+    members:
+      - { name: p1, iface: net12, ip: [172.16.12.1/24] }
+      - { name: pe2, iface: net12, ip: [172.16.12.12/24] }
+  network13:
+    desc: 172.16.13.0/24
+    conn: direct
+    members:
+      - { name: p4, iface: net13, ip: [172.16.13.4/24] }
+      - { name: pe3, iface: net13, ip: [172.16.13.13/24] }
+  network111:
+    desc: 172.16.111.0/24
+    conn: direct
+    members:
+      - { name: pe1, iface: net111, ip: [172.16.111.11/24] }
+      - { name: ce1, iface: net111, ip: [172.16.111.111/24] }
+  network112:
+    desc: 172.16.112.0/24
+    conn: direct
+    members:
+      - { name: pe1, iface: net112, ip: [172.16.112.11/24] }
+      - { name: ce2, iface: net112, ip: [172.16.112.112/24] }
+  network113:
+    desc: 172.16.113.0/24
+    conn: direct
+    members:
+      - { name: pe1, iface: net113, ip: [172.16.113.11/24] }
+      - { name: ce3, iface: net113, ip: [172.16.113.113/24] }
+  network114:
+    desc: 172.16.114.0/24
+    conn: direct
+    members:
+      - { name: pe2, iface: net114, ip: [172.16.114.12/24] }
+      - { name: ce4, iface: net114, ip: [172.16.114.114/24] }
+  network115:
+    desc: 172.16.115.0/24
+    conn: direct
+    members:
+      - { name: pe3, iface: net115, ip: [172.16.115.13/24] }
+      - { name: ce5, iface: net115, ip: [172.16.115.115/24] }
+  network116:
+    desc: 172.16.116.0/24
+    conn: direct
+    members:
+      - { name: pe3, iface: net116, ip: [172.16.116.13/24] }
+      - { name: ce6, iface: net116, ip: [172.16.116.116/24] }
+      
+commands:
+  p1:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net1.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net2.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net11.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net12.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 1.1.1.1/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 1.1.1.1'
+        -c ' network 1.1.1.1/32 area 0.0.0.0'
+        -c ' network 172.16.1.0/24 area 0.0.0.0'
+        -c ' network 172.16.2.0/24 area 0.0.0.0'
+        -c ' network 172.16.11.0/24 area 0.0.0.0'
+        -c ' network 172.16.12.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 1.1.1.1'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 1.1.1.1'
+        -c '  interface lo'
+        -c '  interface net1'
+        -c '  interface net2'
+        -c '  interface net11'
+        -c '  interface net12'
+        -c 'exit'
+  p2:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net1.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net3.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net4.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 2.2.2.2/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 2.2.2.2'
+        -c ' network 2.2.2.2/32 area 0.0.0.0'
+        -c ' network 172.16.1.0/24 area 0.0.0.0'
+        -c ' network 172.16.3.0/24 area 0.0.0.0'
+        -c ' network 172.16.4.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 2.2.2.2'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 2.2.2.2'
+        -c '  interface lo'
+        -c '  interface net1'
+        -c '  interface net3'
+        -c '  interface net4'
+        -c 'exit'
+  p3:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net2.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net3.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net5.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 3.3.3.3/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 3.3.3.3'
+        -c ' network 3.3.3.3/32 area 0.0.0.0'
+        -c ' network 172.16.2.0/24 area 0.0.0.0'
+        -c ' network 172.16.3.0/24 area 0.0.0.0'
+        -c ' network 172.16.5.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 3.3.3.3'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 3.3.3.3'
+        -c '  interface lo'
+        -c '  interface net2'
+        -c '  interface net3'
+        -c '  interface net5'
+        -c 'exit'
+  p4:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net4.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net5.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net13.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 4.4.4.4/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 4.4.4.4'
+        -c ' network 4.4.4.4/32 area 0.0.0.0'
+        -c ' network 172.16.4.0/24 area 0.0.0.0'
+        -c ' network 172.16.5.0/24 area 0.0.0.0'
+        -c ' network 172.16.13.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 4.4.4.4'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 4.4.4.4'
+        -c '  interface lo'
+        -c '  interface net4'
+        -c '  interface net5'
+        -c '  interface net13'
+        -c 'exit'
+  pe1:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net11.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 11.11.11.11/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 11.11.11.11'
+        -c ' network 11.11.11.11/32 area 0.0.0.0'
+        -c ' network 172.16.11.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 11.11.11.11'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 11.11.11.11'
+        -c '  interface lo'
+        -c '  interface net11'
+        -c 'exit'
+    - cmd: ip link add VPN-A type vrf table 10
+    - cmd: ip link add VPN-B type vrf table 20
+    - cmd: ip link set VPN-A up
+    - cmd: ip link set VPN-B up
+    - cmd: ip link set net111 vrf VPN-A
+    - cmd: ip link set net112 vrf VPN-A
+    - cmd: ip link set net113 vrf VPN-B
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'ip route 10.0.0.0/24 172.16.111.111 vrf VPN-A'
+        -c 'ip route 10.0.1.0/24 172.16.112.112 vrf VPN-A'
+        -c 'ip route 10.0.0.0/24 172.16.113.113 vrf VPN-B'        
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000'
+        -c ' neighbor 12.12.12.12 remote-as 65000'
+        -c ' neighbor 12.12.12.12 update-source 11.11.11.11'
+        -c ' neighbor 13.13.13.13 remote-as 65000'
+        -c ' neighbor 13.13.13.13 update-source 11.11.11.11'
+        -c ' address-family ipv4 vpn'
+        -c '  neighbor 12.12.12.12 activate'
+        -c '  neighbor 13.13.13.13 activate'
+        -c 'exit'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000 vrf VPN-A'
+        -c ' address-family ipv4 unicast'
+        -c '  label vpn export auto'
+        -c '  redistribute static'
+        -c '  rd vpn export 65000:1'
+        -c '  rt vpn both 65000:100'
+        -c '  import vpn'
+        -c '  export vpn'
+        -c 'exit'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000 vrf VPN-B'
+        -c ' address-family ipv4 unicast'
+        -c '  label vpn export auto'
+        -c '  redistribute static'
+        -c '  rd vpn export 65000:2'
+        -c '  rt vpn both 65000:200'
+        -c '  import vpn'
+        -c '  export vpn'
+        -c 'exit'
+  pe2:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net12.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 12.12.12.12/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 12.12.12.12'
+        -c ' network 12.12.12.12/32 area 0.0.0.0'
+        -c ' network 172.16.12.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 12.12.12.12'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 12.12.12.12'
+        -c '  interface lo'
+        -c '  interface net12'
+        -c 'exit'
+    - cmd: ip link add VPN-A type vrf table 10
+    - cmd: ip link set VPN-A up
+    - cmd: ip link set net114 vrf VPN-A
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'ip route 192.168.0.0/24 172.16.114.114 vrf VPN-A'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000'
+        -c ' neighbor 11.11.11.11 remote-as 65000'
+        -c ' neighbor 11.11.11.11 update-source 12.12.12.12'
+        -c ' neighbor 13.13.13.13 remote-as 65000'
+        -c ' neighbor 13.13.13.13 update-source 12.12.12.12'
+        -c ' address-family ipv4 vpn'
+        -c '  neighbor 11.11.11.11 activate'
+        -c '  neighbor 13.13.13.13 activate'
+        -c 'exit'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000 vrf VPN-A'
+        -c ' address-family ipv4 unicast'
+        -c '  label vpn export auto'
+        -c '  redistribute static'
+        -c '  rd vpn export 65000:1'
+        -c '  rt vpn both 65000:100'
+        -c '  import vpn'
+        -c '  export vpn'
+        -c 'exit'
+  pe3:
+    - cmd: sysctl -w net.mpls.conf.lo.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.conf.net13.input=1 > /dev/null
+    - cmd: sysctl -w net.mpls.platform_labels=1024 > /dev/null
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 13.13.13.13/32'
+        -c ' ip ospf passive'
+        -c 'exit'
+        -c 'router ospf'
+        -c ' ospf router-id 13.13.13.13'
+        -c ' network 13.13.13.13/32 area 0.0.0.0'
+        -c ' network 172.16.13.0/24 area 0.0.0.0'
+        -c 'exit'
+        -c 'mpls ldp'
+        -c ' router-id 13.13.13.13'
+        -c ' address-family ipv4'
+        -c '  discovery transport-address 13.13.13.13'
+        -c '  interface lo'
+        -c '  interface net13'
+        -c 'exit'
+    - cmd: ip link add VPN-A type vrf table 10
+    - cmd: ip link add VPN-B type vrf table 20
+    - cmd: ip link set VPN-A up
+    - cmd: ip link set VPN-B up
+    - cmd: ip link set net115 vrf VPN-A
+    - cmd: ip link set net116 vrf VPN-B
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'ip route 10.0.2.0/24 172.16.115.115 vrf VPN-A'
+        -c 'ip route 10.0.1.0/24 172.16.116.116 vrf VPN-B'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000'
+        -c ' neighbor 11.11.11.11 remote-as 65000'
+        -c ' neighbor 11.11.11.11 update-source 13.13.13.13'
+        -c ' neighbor 12.12.12.12 remote-as 65000'
+        -c ' neighbor 12.12.12.12 update-source 13.13.13.13'
+        -c ' address-family ipv4 vpn'
+        -c '  neighbor 11.11.11.11 activate'
+        -c '  neighbor 12.12.12.12 activate'
+        -c 'exit'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000 vrf VPN-A'
+        -c ' address-family ipv4 unicast'
+        -c '  label vpn export auto'
+        -c '  redistribute static'
+        -c '  rd vpn export 65000:1'
+        -c '  rt vpn both 65000:100'
+        -c '  import vpn'
+        -c '  export vpn'
+        -c 'exit'
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'router bgp 65000 vrf VPN-B'
+        -c ' address-family ipv4 unicast'
+        -c '  label vpn export auto'
+        -c '  redistribute static'
+        -c '  rd vpn export 65000:2'
+        -c '  rt vpn both 65000:200'
+        -c '  import vpn'
+        -c '  export vpn'
+        -c 'exit'
+  ce1:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 10.0.0.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.111.11'
+  ce2:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 10.0.1.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.112.11'
+  ce3:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 10.0.0.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.113.11'
+  ce4:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 192.168.0.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.114.12'
+  ce5:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 10.0.2.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.115.13'
+  ce6:
+    - cmd: >-
+        vtysh -c 'conf t'
+        -c 'interface lo'
+        -c ' ip addr 10.0.1.1/24'
+        -c 'exit'
+        -c 'ip route 0.0.0.0/0 172.16.116.13'

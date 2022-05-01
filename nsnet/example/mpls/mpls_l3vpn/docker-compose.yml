@@ -1,0 +1,210 @@
+version: '3.9'
+services:
+  p1:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  p2:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  p3:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  p4:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  pe1:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  pe2:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  pe3:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce1:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce2:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce3:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce4:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce5:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
+  ce6:
+    image: frr8.1:ubuntu18.04
+    tty: true
+    privileged: true
+    network_mode: "none"
+    sysctls:
+      - net.ipv4.conf.all.forwarding=1
+      - net.ipv4.conf.all.rp_filter=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv4.conf.default.forwarding=1
+      - net.ipv4.conf.default.rp_filter=0
+      - net.ipv6.conf.default.forwarding=1
+      - net.ipv6.conf.default.disable_ipv6=0
+      - net.ipv6.conf.default.seg6_enabled=1
