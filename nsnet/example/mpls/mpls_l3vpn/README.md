@@ -7,7 +7,9 @@
 ## Host Requirement
 
 ```shell
-sudo apt install linux-modules-extra-`uname -r` 
+% sudo apt install linux-modules-extra-`uname -r` 
+% sudo modprobe mpls_router mpls_iptunnel mpls_gso
+% lsmode | grep mpls 
 ```
 
 ## Run
