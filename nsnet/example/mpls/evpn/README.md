@@ -19,14 +19,14 @@
 Advertise EVPN Type2 Forcibly
 
 ```shell
-% sudo nsnet shell ce1 && ip netns exec h1 ping -c2 10.0.0.1 && exit
-% sudo nsnet shell ce2 && ip netns exec h2 ping -c2 10.0.1.1 && exit
-% sudo nsnet shell ce3 && ip netns exec h3 ping -c2 10.0.0.1 && exit
-% sudo nsnet shell ce4 && ip netns exec h4-1 ping -c2 10.0.0.1 && exit
-% sudo nsnet shell ce4 && ip netns exec h4-2 ping -c2 10.0.1.1 && exit
-% sudo nsnet shell ce4 && ip netns exec h4-3 ping -c2 192.168.0.1 && exit
-% sudo nsnet shell ce5 && ip netns exec h5 ping -c2 10.0.0.1 && exit
-% sudo nsnet shell ce6 && ip netns exec h6 ping -c2 10.0.1.1 && exit
+% docker-compose exec ce1 ip netns exec h1 ping -c2 10.0.0.1 \
+    && docker-compose exec ce2 ip netns exec h2 ping -c2 10.0.1.1 \
+    && docker-compose exec ce3 ip netns exec h3 ping -c2 10.0.0.1 \
+    && docker-compose exec ce4 ip netns exec h4-1 ping -c2 10.0.0.1 \
+    && docker-compose exec ce4 ip netns exec h4-2 ping -c2 10.0.1.1 \
+    && docker-compose exec ce4 ip netns exec h4-3 ping -c2 192.168.0.1 \
+    && docker-compose exec ce5 ip netns exec h5 ping -c2 10.0.0.1 \
+    && docker-compose exec ce6 ip netns exec h6 ping -c2 10.0.0.1
 ```
 
 L2VNI Test
@@ -60,16 +60,15 @@ bridge link                    # bridge 配下のIF一覧
 bridge monitor link            # bridge のイベント監視
 bridge monitor fdb
 ip neighbor                    # ARPテーブル確認
-ip neighbor show dev br100     # IF 
+ip neighbor show dev br.101    # IF 
 ip -s neigh flush all          # ARPテーブル初期化
 ip -d link show type vxlan     # vrf-1 に属するIFの詳細情報
-ip -d link show vrf VPM-A-1    # VXLAN IF の詳細情報
 
 #-----------------------------------------
 # L3
 #-----------------------------------------
-ip route show vrf VPM-A-1      # ルーティングテーブルの確認
-ip -d addr show vrf VPM-A-1    # vrf-1 に属するIFの詳細情報
+ip route show vrf VPN-A-1      # ルーティングテーブルの確認
+ip -d addr show vrf VPN-A-1    # vrf-1 に属するIFの詳細情報
 ip -d addr show type vxlan     # VXLAN IF の詳細情報
 
 #-----------------------------------------
@@ -77,13 +76,16 @@ ip -d addr show type vxlan     # VXLAN IF の詳細情報
 #-----------------------------------------
 show running-config            # FRR の設定
 show ip route                  # ルーティングテーブルの確認
-show ip route vrf VPM-A-1      # ルーティングテーブル(vrf)の確認
+show ip route vrf VPN-A-1      # ルーティングテーブル(vrf)の確認
 show bgp summary               # BGP 情報
-show bgp vrf VPM-A-1 summary   # Overlay BGP の情報
+show bgp vrf VPN-A-1 summary   # Overlay BGP の情報
 show bgp l2vpn evpn summary    # EVPN の状態確認
 show bgp l2vpn evpn vni        # VNIとVRFの情報
+show bgp l2vpn evpn vni 100    # VNIとVRFの情報
+show bgp l2vpn evpn vni 101    # VNIとVRFの情報
 show evpn vni                  # VNIの情報
 show evpn vni 100              # VNIの情報
+show evpn vni 101              # VNIの情報
 ```
 
 ## Links
