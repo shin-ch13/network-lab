@@ -11,7 +11,7 @@
 ```shell
 % sudo apt install linux-modules-extra-`uname -r` 
 % sudo modprobe mpls_router mpls_iptunnel mpls_gso
-% lsmode | grep mpls 
+% lsmod | grep mpls 
 ```
 
 ## Run
