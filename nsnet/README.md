@@ -17,6 +17,8 @@ Nsnet creat docker container enviroment with flexible network.
 $ git clone https://github.com/shin-ch13/network-lab.git && cd nsnet
 # install
 $ sudo python3 setup.py install
+or 
+$ sudo pip3 install -e .
 # uninstall
 $ sudo rm /usr/local/lib/python3.6/dist-packages/nsnet-*
 $ sudo rm /usr/local/bin/nsnet
